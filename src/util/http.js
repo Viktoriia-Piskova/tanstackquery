@@ -71,7 +71,7 @@ export const fetchEvent = async ({ signal, id }) => {
   return event.event;
 };
 
-export const deleteEvent = async ({id}) => {
+export const deleteEvent = async ({ id }) => {
   const response = await fetch(`http://localhost:3000/events/${id}`, {
     method: "DELETE",
   });
@@ -84,4 +84,24 @@ export const deleteEvent = async ({id}) => {
   }
 
   return response.json();
+};
+
+export const updateEvent = async ({ id, event }) => {
+  const response = await fetch(`http://localhost:3000/events/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({event}),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error();
+    error.code = response.status;
+    error.info = await response.json();
+    throw error;
+  }
+
+  const data = await response.json();
+  return data;
 };
